@@ -15,10 +15,13 @@ namespace PrincipiosSOLID
         public string Name { get; set; }
         public string Brand { get; set; }
 
-        public Beer(string name, string brand)
+        public int Alcohol { get; set; }
+
+        public Beer(string name, string brand, int alcohol)
         {
             Name = name;
             Brand = brand;
+            Alcohol = alcohol;
         }
     }
 
@@ -30,7 +33,7 @@ namespace PrincipiosSOLID
         }
         public void Save()
         {
-            Console.WriteLine($"Cerveza {_beer.Name} - {_beer.Brand}, guardada");
+            Console.WriteLine($"Cerveza {_beer.Name} - {_beer.Brand} con {_beer.Alcohol} grados, guardada");
         }
     }
 
@@ -43,7 +46,7 @@ namespace PrincipiosSOLID
         }
         public void Send()
         {
-            Console.WriteLine($"Enviando cerveza {_beer.Name} - {_beer.Brand}");
+            Console.WriteLine($"Enviando cerveza {_beer.Name} - {_beer.Brand} con {_beer.Alcohol} grados");
         }
     }
 }
