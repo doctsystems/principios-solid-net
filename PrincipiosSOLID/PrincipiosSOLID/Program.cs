@@ -1,52 +1,44 @@
-﻿using System;
+﻿using Serilog;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Runtime.Remoting.Messaging;
 using System.Xml.Linq;
 
 namespace PrincipiosSOLID
 {
     internal class Program
     {
+        private readonly string path = "C:/temp";
+
+        private readonly Dictionary<string, string> Cache;
+
         static void Main(string[] args)
         {
+
         }
-    }
 
-    public class Beer
-    {
-        public string Name { get; set; }
-        public string Brand { get; set; }
-
-        public int Alcohol { get; set; }
-
-        public Beer(string name, string brand, int alcohol)
+        public void GuardarArticulo(string contenido, string titulo)
         {
-            Name = name;
-            Brand = brand;
-            Alcohol = alcohol;
+            Log.Information($"vamos a insertar el articulo {titulo}");
+            File.WriteAllText($"{path}/{titulo}.txt", contenido);
+            Log.Information($"articulo {titulo} insertado");
+            this.Cache.Add(titulo, contenido);
         }
-    }
 
-    public class BeerDB
-    {
-        private Beer _beer;
-        public BeerDB (Beer beer) {
-            _beer = beer;
-        }
-        public void Save()
+        public string ConsultarArticulo(string titulo)
         {
-            Console.WriteLine($"Cerveza {_beer.Name} - {_beer.Brand} con {_beer.Alcohol} grados, guardada");
-        }
-    }
+            Log.Information($"consultar articulo {titulo}");
+            string contenido = this.Cache[titulo];
+            if (!string.IsNullOrWhiteSpace(contenido))
+            {
+                Log.Information($"Articulo \"{titulo}\" encontrado en la cache");
+                return contenido;
+            }
 
-    public class BeerRequest
-    {
-        private Beer _beer;
-        public BeerRequest(Beer beer)
-        {
-            _beer = beer;
-        }
-        public void Send()
-        {
-            Console.WriteLine($"Enviando cerveza {_beer.Name} - {_beer.Brand} con {_beer.Alcohol} grados");
+            Log.Information($"buscar articulo \"{titulo}\" en el sistema de archivos");
+            contenido = File.ReadAllText($"{path}/{titulo}.txt");
+            return contenido;
         }
     }
 }
